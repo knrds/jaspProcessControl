@@ -329,9 +329,9 @@ doeFactorial <- function(jaspResults, dataset, options, ...) {
 
     #DATA CODING
     if(options[["factorialCenterPoints"]] >= 1){
-      rows[,2:(options[["numberOfFactors"]]+1)] <- as.numeric(rows[,2:(options[["numberOfFactors"]]+1)])
+      rows[,2:(options[["numberOfFactors"]]+1)] <- sapply(rows[,2:(options[["numberOfFactors"]]+1)], as.numeric)
     } else {
-      rows[,2:(options[["numberOfFactors"]]+1)] <- as.numeric(rows[,2:(options[["numberOfFactors"]]+1)]) * 2 - 3
+      rows[,2:(options[["numberOfFactors"]]+1)] <- sapply(rows[,2:(options[["numberOfFactors"]]+1)], as.numeric) * 2 - 3
     }
 
 
@@ -339,11 +339,9 @@ doeFactorial <- function(jaspResults, dataset, options, ...) {
       for(i in 1:as.numeric(options[["numberOfFactors"]])){
         rows[,i+1][rows[,i+1] == -1] <- factorLows[i]
         if(options[["factorialCenterPoints"]] >= 1){
-          rows[,i+1][rows[,i+1] == 0] <- if(!is.na(as.numeric(factorLows[i]) + as.numeric(factorHighs[i]))){
-            (as.numeric(factorLows[i]) + as.numeric(factorHighs[i]))/2
-          } else {
-            "center"
-          }
+          rows[,i+1][rows[,i+1] == 0] <- ifelse(!is.na(as.numeric(factorLows[i]) + as.numeric(factorHighs[i])),
+                                                (as.numeric(factorLows[i]) + as.numeric(factorHighs[i]))/2,
+                                                "center")
         }
         rows[,i+1][rows[,i+1] == 1] <- factorHighs[i]
       }
